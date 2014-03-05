@@ -1,0 +1,1 @@
+adb push D:\Projects\Android\workspace\RecipeGallery\recipes /sdcard/cookbuddy

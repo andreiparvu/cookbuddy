@@ -47,7 +47,10 @@ public 	class VoiceRecognitionActivity
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-
+		audioManager.setMode(AudioManager.MODE_IN_CALL);
+		audioManager.startBluetoothSco();
+		audioManager.setBluetoothScoOn(true);
+		
 		sr = SpeechRecognizer.createSpeechRecognizer(this);
 		sr.setRecognitionListener(new CustomRecListener());
 		
@@ -57,7 +60,7 @@ public 	class VoiceRecognitionActivity
 		
 		// preparing active recognition
 		recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-		recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+		recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
 		recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, "voice.recognition.test");
 		recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, NO_OF_MATCHES);
 		recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
@@ -72,6 +75,11 @@ public 	class VoiceRecognitionActivity
 			ioana.stop();
 			ioana.shutdown();
 		}
+
+		audioManager.setMode(AudioManager.MODE_NORMAL);
+		audioManager.stopBluetoothSco();
+		audioManager.setBluetoothScoOn(false);
+		
 		super.onDestroy();
 	}
 	
@@ -112,25 +120,7 @@ public 	class VoiceRecognitionActivity
 	}
 
 	public void promptSpeak() {
-		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-
-		// Specify the calling package to identify your application
-		intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getClass().getPackage().getName());
-
-		// Display an hint to the user about what he should say.
-		intent.putExtra(RecognizerIntent.EXTRA_PROMPT, speakPromptString);
-
-		// Given an hint to the recognizer about what the user is going to say
-		// There are two form of language model available
-		//1.LANGUAGE_MODEL_WEB_SEARCH : For short phrases
-		//2.LANGUAGE_MODEL_FREE_FORM  : If not sure about the words or phrases and its domain.
-		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
-
-		// Specify how many results you want to receive. The results will be
-		// sorted where the first result is the one with higher confidence.
-		intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, NO_OF_MATCHES);
-		//Start the Voice recognizer activity for the result.
-		startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
+		startActivityForResult(recognizerIntent, VOICE_RECOGNITION_REQUEST_CODE);
 	}
 
 

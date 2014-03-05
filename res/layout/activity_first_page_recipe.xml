@@ -3,17 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#FFFFFFFF"
     tools:context=".FirstPageRecipe" >
+
+    <!-- android:paddingBottom="@dimen/activity_vertical_margin" -->
+    <!-- android:paddingLeft="@dimen/activity_horizontal_margin" -->
+    <!-- android:paddingRight="@dimen/activity_horizontal_margin" -->
+    <!-- android:paddingTop="@dimen/activity_vertical_margin" -->
+
+    <View
+        android:id="@+id/view_aux"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp" />
 
     <ImageView
         android:id="@+id/image_recipe"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/img_content_description" />
+        android:layout_height="225dp"
+        android:contentDescription="@string/img_content_description" 
+        android:layout_below="@id/view_aux"/>
 
     <View
         android:id="@+id/view"
@@ -30,8 +38,12 @@
 
         <TextView
             android:id="@+id/ingredients"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            />
     </ScrollView>
 
     <LinearLayout
@@ -40,21 +52,23 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/back_button"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/back"
-            android:gravity="bottom" />
-
-        <Button
-            android:id="@+id/start_cooking_button"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/startcooking"
-            android:gravity="bottom" />
+<!--         <Button -->
+<!--             android:id="@+id/back_button" -->
+<!--             style="?android:attr/buttonBarButtonStyle" -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:background="@drawable/back" -->
+<!--             android:gravity="bottom" /> -->
     </LinearLayout>
+
+    <Button
+        android:id="@+id/start_cooking_button"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/startcooking4"
+        android:gravity="bottom" />
 
 </RelativeLayout>

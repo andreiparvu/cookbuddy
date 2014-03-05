@@ -3,9 +3,11 @@ package com.example.cookbuddy;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.graphics.Typeface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.View;
@@ -40,18 +42,20 @@ public class FirstPageRecipe extends Activity {
 		}
 		
 		TextView ingredientsTextView = (TextView)findViewById(R.id.ingredients);
-		Typeface externalFont = Typeface.createFromAsset(context.getAssets(), "fonts/century.ttf");
+		Typeface externalFont = Typeface.createFromAsset(context.getAssets(), "fonts/lane_narrow.ttf");
 		ingredientsTextView.setTypeface(externalFont);
-		ingredientsTextView.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
+		ingredientsTextView.setTextColor(Color.parseColor("#12418C"));
+//		ingredientsTextView.setTypeface(null, Typeface.BOLD);
+		ingredientsTextView.setTextSize(TypedValue.COMPLEX_UNIT_PT, 18);
 		ingredientsTextView.setText(ingredients);
 		
-		Button backBtn = (Button)findViewById(R.id.back_button);
-		backBtn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				finish();
-			}
-		});
+//		Button backBtn = (Button)findViewById(R.id.back_button);
+//		backBtn.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View arg0) {
+//				finish();
+//			}
+//		});
 		
 		Button startBtn = (Button)findViewById(R.id.start_cooking_button);
 		startBtn.setOnClickListener(new OnClickListener() {

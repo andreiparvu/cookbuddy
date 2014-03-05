@@ -3,6 +3,7 @@ package com.example.cookbuddy;
 import java.util.ArrayList;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -30,8 +31,6 @@ public class StepActivity extends VoiceRecognitionActivity {
 	private Button nextBtn;
 	private int nrSteps;
 	
-	public Object mainThread = this;
-
 	boolean speaking = true;
 
 	@Override
@@ -63,10 +62,8 @@ public class StepActivity extends VoiceRecognitionActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				showNextStep();
 			}
-
 		});
 
 	}
@@ -133,10 +130,15 @@ public class StepActivity extends VoiceRecognitionActivity {
 	}
 
 	private void updateData() {
-
-		Typeface externalFont = Typeface.createFromAsset(this.getAssets(), "fonts/century.ttf");
+		// set audio back to normal (hi-quality)
+//		audioManager.setMode(AudioManager.MODE_NORMAL);
+//		audioManager.stopBluetoothSco();
+//		audioManager.setBluetoothScoOn(false);
+		
+		Typeface externalFont = Typeface.createFromAsset(this.getAssets(), "fonts/lane_narrow.ttf");
 		instructions.setTypeface(externalFont);
-		instructions.setTextSize(TypedValue.COMPLEX_UNIT_PT, 9);
+		instructions.setTextSize(TypedValue.COMPLEX_UNIT_PT, 18);
+		instructions.setTextColor(Color.parseColor("#12418C"));
 		
 		instructions.setText(rr.getStepText(currentStep));
 		currentPicture.setImageBitmap(rr.getStepPicture(currentStep));
@@ -156,6 +158,11 @@ public class StepActivity extends VoiceRecognitionActivity {
 				instructions.post(new Runnable() {
 					@Override
 					public void run() {
+						// set audio to comm mode for mic rerouting
+						audioManager.setMode(AudioManager.MODE_IN_CALL);
+						audioManager.startBluetoothSco();
+						audioManager.setBluetoothScoOn(true);
+						
 						sr.startListening(recognizerIntent);
 					}
 				});

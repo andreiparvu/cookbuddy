@@ -1,5 +1,9 @@
 package com.example.cookbuddy;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +32,8 @@ public class RecipeGallery extends Activity {
 
 	private int nrRecipes;
 	private MainReader mr;
+	
+	private HashMap <Integer, Pair> drawerMap;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +63,50 @@ public class RecipeGallery extends Activity {
 		 * getActionBar().setTitle("Cook Buddy"); invalidateOptionsMenu(); //
 		 * creates call to // onPrepareOptionsMenu() } };
 		 */
-		//mDrawerLayout.setDrawerListener(mDrawerToggle);
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
 
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                //getActionBar().setTitle(mTitle);
+                
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                //getActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+		mDrawerLayout.setDrawerListener(mDrawerToggle);
+		
+		
+		
+		drawerMap = new HashMap <Integer, Pair>();
+		
+		//Map <Integer, HashMap<String, DrawerItem>> drawerMap = new HashMap<Integer,String, DrawerItem>();
+		drawerMap.put(2, new Pair("cocktail", new DrawerItem(R.drawable.section_cocktail)));
+		drawerMap.put(1, new Pair("cakes", new DrawerItem(R.drawable.section_cakes)));
+		drawerMap.put(3, new Pair("pasta", new DrawerItem(R.drawable.section_pasta)));
+		drawerMap.put(4, new Pair("salads", new DrawerItem(R.drawable.section_salads)));
+		drawerMap.put(5, new Pair("smoothies", new DrawerItem(R.drawable.section_smoothies)));
+		drawerMap.put(6, new Pair("stakes", new DrawerItem(R.drawable.section_stakes)));
+		drawerMap.put(0, new Pair("main", new DrawerItem(R.drawable.section_all)));
+		drawerMap.put(7, new Pair("delicacies", new DrawerItem(R.drawable.section_delicacies)));
+		
 		drawerAdapter = new DrawerAdapter(this);
 
-		drawerAdapter.addItem(new DrawerItem(R.drawable.amfood));
-		drawerAdapter.addItem(new DrawerItem(R.drawable.sweets));
-		drawerAdapter.addItem(new DrawerItem(R.drawable.smoothies));
-		drawerAdapter.addItem(new DrawerItem(R.drawable.interesting));
+		for (int i = 0; i < drawerMap.size(); i++) {
+			drawerAdapter.addItem(drawerMap.get(i).di);
+		}
+		
+//		drawerAdapter.addItem(new DrawerItem(R.drawable.amfood));
+//		drawerAdapter.addItem(new DrawerItem(R.drawable.sweets));
+//		drawerAdapter.addItem(new DrawerItem(R.drawable.smoothies));
+//		drawerAdapter.addItem(new DrawerItem(R.drawable.interesting));
 
 		mDrawerList.setAdapter(drawerAdapter);
 
@@ -73,7 +115,20 @@ public class RecipeGallery extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
+				arg1.setSelected(true);
 				Log.v("DRAWER", "position: " + arg2);
+				
+				
+				//arg1.setAlpha(0.3f);
+				
+				if (arg2 == 0) {
+					populateFields("main");
+				} else {
+					Pair p = drawerMap.get(arg2);
+					populateFields(p.category);
+				}
+
+				/*
 				if (arg2 == 0) {
 					populateFields("amfood");
 				}
@@ -86,6 +141,7 @@ public class RecipeGallery extends Activity {
 				if (arg2 == 3) {
 					populateFields("main");
 				}
+				*/
 				
 				mDrawerLayout.closeDrawer(mDrawerList);
 			}
@@ -121,7 +177,7 @@ public class RecipeGallery extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
 				// TODO Auto-generated method stub
-				Log.v("TAG", "position: " + position);
+				Log.v("TAG", "position: " + position + " => " + mr.getId(position + 1));
 
 				Intent intent = new Intent();
 				intent.setClass(context, FirstPageRecipe.class);
@@ -185,6 +241,16 @@ public class RecipeGallery extends Activity {
 					adapter.addItem(item);
 				}
 			}
+		}
+	}
+	
+	public class Pair {
+		String category;
+		DrawerItem di;
+		
+		public Pair (String category, DrawerItem di) {
+			this.category = category;
+			this.di = di;
 		}
 	}
 
