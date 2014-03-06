@@ -1,79 +1,78 @@
 package com.example.cookbuddy;
-import java.io.*;
-import java.util.*;
-import android.annotation.SuppressLint;
-import android.graphics.*;
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 public class MainReader {
 	
-	private int nrRecipes;
-	private ArrayList<Recipe> recipes;
+	private ArrayList<RecipeItem> items = new ArrayList<RecipeItem>();
 	
-	final class Recipe {
-		public String title, id, duration;
-		public int complexity;
-		public String categories;
+	private class ConnectThread extends Thread {
+		public void run() {
+			try {
+				Log.println(Log.DEBUG, "mydebug", "facem conexiunea");
+				
+				Socket s = new Socket(Connection.IP, Connection.PORT);
+		
+				Log.println(Log.DEBUG, "mydebug", "s-a facut conexiunea");
+			    ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
+			    ObjectInputStream in = new ObjectInputStream(s.getInputStream());
+			    
+			    out.writeObject(new DataRequest(DataRequest.MAIN_RECIPES));
+			    out.flush();
+			    
+			    for (ShortRecipe recipe : (ArrayList<ShortRecipe>)in.readObject()) {
+			    	ByteArrayInputStream imageStream = new ByteArrayInputStream(recipe.picture);
+			    	
+			    	items.add(new RecipeItem(
+			    			recipe.title,
+			    			recipe.id,
+			    			recipe.duration,
+			    			recipe.complexity,
+			    			recipe.categories,
+			    			BitmapFactory.decodeStream(imageStream))
+			    	);
+			    }
+			    Log.d("mydebug", "ok");
+			    s.close();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}	
+		}
 	}
 	
-	@SuppressLint("SdCardPath")
 	public MainReader() {
-		File mainFile = new File("/sdcard/cookbuddy/main.txt");
-		recipes = new ArrayList<Recipe>();
-		
 		try {
-			BufferedReader input = new BufferedReader(
-		            new InputStreamReader(new FileInputStream(mainFile)));
+			ConnectThread t = new ConnectThread();
 			
-			nrRecipes = Integer.parseInt(input.readLine());
-			System.out.println(nrRecipes);
-			for (int i = 0; i < nrRecipes; i++) {
-				Recipe curRecipe = new Recipe();
-				
-				curRecipe.title = input.readLine();
-				curRecipe.id = input.readLine();
-				curRecipe.complexity = Integer.parseInt(input.readLine());
-				curRecipe.duration = input.readLine();
-				curRecipe.categories = input.readLine();
-				
-				recipes.add(curRecipe);
-			}
+			t.start();
 			
-			input.close();
+			t.join();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		
-		System.out.println(recipes.size());
+		}		
 	}
 	
 	public int getNrRecipes() {
-		return nrRecipes;
+		return items.size();
 	}
 	
-	public String getTitle(int nrRecipe) {
-		return recipes.get(nrRecipe - 1).title;
+	public RecipeItem getItem(int nrRecipe) {
+		return items.get(nrRecipe);
 	}
 	
 	public String getId(int nrRecipe) {
-		return recipes.get(nrRecipe - 1).id;
+		return items.get(nrRecipe).id;
 	}
-	
-	public int getComplexity(int nrRecipe) {
-		return recipes.get(nrRecipe - 1).complexity;
-	}
-	
-	public String getDuration(int nrRecipe) {
-		return recipes.get(nrRecipe - 1).duration;
-	}
-	
+
 	public String getCategory(int nrRecipe) {
-		return recipes.get(nrRecipe - 1).categories;
-	}
-	
-	@SuppressLint("SdCardPath")
-	public Bitmap getPicture(int nrRecipe) {
-		return BitmapFactory.decodeFile("/sdcard/cookbuddy/" + getId(nrRecipe) + "/main.jpg");
+		return items.get(nrRecipe).categories;
 	}
 }

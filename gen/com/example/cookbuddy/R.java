@@ -22,27 +22,31 @@ public final class R {
     }
     public static final class drawable {
         public static final int amfood=0x7f020000;
-        public static final int border=0x7f020001;
-        public static final int clocktime=0x7f020002;
-        public static final int complexity=0x7f020003;
-        public static final int drawer_shadow=0x7f020004;
-        public static final int headergrill=0x7f020005;
-        public static final int headersoups=0x7f020006;
-        public static final int ic_drawer=0x7f020007;
-        public static final int ic_launcher=0x7f020008;
-        public static final int img_recipe1=0x7f020009;
-        public static final int interesting=0x7f02000a;
-        public static final int logoblackgg=0x7f02000b;
-        public static final int logomark=0x7f02000c;
-        public static final int logomarkwhite=0x7f02000d;
-        public static final int menuseparator=0x7f02000e;
-        public static final int navbackforpreview=0x7f02000f;
-        public static final int navnextstep=0x7f020010;
-        public static final int navprevstep=0x7f020011;
-        public static final int navstartcookingforpreview=0x7f020012;
-        public static final int serveshowmany=0x7f020013;
-        public static final int smoothies=0x7f020014;
-        public static final int sweets=0x7f020015;
+        public static final int back=0x7f020001;
+        public static final int border=0x7f020002;
+        public static final int clocktime=0x7f020003;
+        public static final int complexity=0x7f020004;
+        public static final int drawer_shadow=0x7f020005;
+        public static final int headergrill=0x7f020006;
+        public static final int headersoups=0x7f020007;
+        public static final int ic_drawer=0x7f020008;
+        public static final int ic_launcher=0x7f020009;
+        public static final int img_recipe1=0x7f02000a;
+        public static final int interesting=0x7f02000b;
+        public static final int logoblackgg=0x7f02000c;
+        public static final int logomark=0x7f02000d;
+        public static final int logomarkwhite=0x7f02000e;
+        public static final int menuseparator=0x7f02000f;
+        public static final int navbackforpreview=0x7f020010;
+        public static final int navnextstep=0x7f020011;
+        public static final int navprevstep=0x7f020012;
+        public static final int navstartcookingforpreview=0x7f020013;
+        public static final int nextstep=0x7f020014;
+        public static final int prevstep=0x7f020015;
+        public static final int serveshowmany=0x7f020016;
+        public static final int smoothies=0x7f020017;
+        public static final int startcooking=0x7f020018;
+        public static final int sweets=0x7f020019;
     }
     public static final class id {
         public static final int action_settings=0x7f080011;

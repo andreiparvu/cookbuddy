@@ -32,32 +32,17 @@ public class RecipeGallery extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Log.d("mydebug", "pornit-am");
+		
 		setContentView(R.layout.activity_recipe_gallery);
 
-		// ActionBar actionBar = getActionBar();
-		// actionBar.setDisplayHomeAsUpEnabled(true);
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.drawer_list);
 
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
 				GravityCompat.START);
-
-		/*
-		 * mDrawerToggle = new ActionBarDrawerToggle(this, // host Activity
-		 * mDrawerLayout, // DrawerLayout object R.drawable.ic_drawer, //nav
-		 * drawer image to replace 'Up' caret R.string.drawer_open, //
-		 * "open drawer" description for accessibility R.string.drawer_close //
-		 * "close drawer" description for accessibility ) { public void
-		 * onDrawerClosed(View view) { getActionBar().setTitle("Cook Buddy");
-		 * invalidateOptionsMenu(); // creates call to // onPrepareOptionsMenu()
-		 * }
-		 * 
-		 * public void onDrawerOpened(View drawerView) {
-		 * getActionBar().setTitle("Cook Buddy"); invalidateOptionsMenu(); //
-		 * creates call to // onPrepareOptionsMenu() } };
-		 */
-		//mDrawerLayout.setDrawerListener(mDrawerToggle);
 
 		drawerAdapter = new DrawerAdapter(this);
 
@@ -97,19 +82,9 @@ public class RecipeGallery extends Activity {
 		mr = new MainReader();
 		nrRecipes = mr.getNrRecipes();
 
-		// System.out.println("NR recipes: " + nrRecipes);
-
+		Log.d("mydebug", "uite " + nrRecipes);
+		
 		populateFields("main");
-		/*
-		for (int i = 0; i < nrRecipes; i++) {
-			RecipeItem item = new RecipeItem();
-			item.title = mr.getTitle(i + 1);
-			item.complexity = mr.getComplexity(i + 1);
-			item.prepTime = mr.getDuration(i + 1);
-			item.picture = mr.getPicture(i + 1);
-			adapter.addItem(item);
-		}
-		*/
 
 		lv.setAdapter(adapter);
 
@@ -125,7 +100,7 @@ public class RecipeGallery extends Activity {
 
 				Intent intent = new Intent();
 				intent.setClass(context, FirstPageRecipe.class);
-				intent.putExtra("recipeId", mr.getId(position + 1));
+				intent.putExtra("recipeId", mr.getId(position));
 				startActivity(intent);
 			}
 		});
@@ -142,47 +117,27 @@ public class RecipeGallery extends Activity {
 		adapter.clear();
 		if (categories.equals("main")) {
 			for (int i = 0; i < nrRecipes; i++) {
-				RecipeItem item = new RecipeItem();
-				item.title = mr.getTitle(i + 1);
-				item.complexity = mr.getComplexity(i + 1);
-				item.prepTime = mr.getDuration(i + 1);
-				item.picture = mr.getPicture(i + 1);
-				adapter.addItem(item);
+				adapter.addItem(mr.getItem(i));
 			}
 		}
 		if (categories.equals("smoothies")) {
 			for (int i = 0; i < nrRecipes; i++) {
-				if (mr.getCategory(i+1).equals("smoothies")) {
-					RecipeItem item = new RecipeItem();
-					item.title = mr.getTitle(i + 1);
-					item.complexity = mr.getComplexity(i + 1);
-					item.prepTime = mr.getDuration(i + 1);
-					item.picture = mr.getPicture(i + 1);
-					adapter.addItem(item);
+				if (mr.getCategory(i).equals("smoothies")) {
+					adapter.addItem(mr.getItem(i));
 				}
 			}
 		}
 		if (categories.equals("amfood")) {
 			for (int i = 0; i < nrRecipes; i++) {
-				if (mr.getCategory(i+1).equals("amfood")) {
-					RecipeItem item = new RecipeItem();
-					item.title = mr.getTitle(i + 1);
-					item.complexity = mr.getComplexity(i + 1);
-					item.prepTime = mr.getDuration(i + 1);
-					item.picture = mr.getPicture(i + 1);
-					adapter.addItem(item);
+				if (mr.getCategory(i).equals("amfood")) {
+					adapter.addItem(mr.getItem(i));
 				}
 			}
 		}
 		if (categories.equals("sweets")) {
 			for (int i = 0; i < nrRecipes; i++) {
-				if (mr.getCategory(i+1).equals("sweets")) {
-					RecipeItem item = new RecipeItem();
-					item.title = mr.getTitle(i + 1);
-					item.complexity = mr.getComplexity(i + 1);
-					item.prepTime = mr.getDuration(i + 1);
-					item.picture = mr.getPicture(i + 1);
-					adapter.addItem(item);
+				if (mr.getCategory(i).equals("sweets")) {
+					adapter.addItem(mr.getItem(i));
 				}
 			}
 		}
