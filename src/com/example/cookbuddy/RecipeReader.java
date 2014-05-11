@@ -1,80 +1,91 @@
 package com.example.cookbuddy;
 
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.annotation.SuppressLint;
-import android.graphics.*;
-import android.util.Log;
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 
 public class RecipeReader {
-	private CompleteRecipe recipe;
+	private int nrSteps;
+	private ArrayList<String> ingredients, steps;
+	private ArrayList<Bitmap> bitmaps;
+	private String id;
 	
-	private class ConnectThread extends Thread {
-		private String id;
+	@SuppressLint("SdCardPath")
+	public RecipeReader(String id, Context context) {
+		File recipeFile = new File("/sdcard/cookbuddy/" + id + "/recipe.txt");
 		
-		public ConnectThread(String id) {
-			this.id = id;
-		}
+		AssetManager am = context.getAssets();
 		
-		public void run() {
-			try {
-				Log.println(Log.DEBUG, "mydebug", "facem conexiunea");
-				
-				Socket s = new Socket(Connection.IP, Connection.PORT);
-		
-				Log.println(Log.DEBUG, "mydebug", "s-a facut conexiunea 2 ");
-			    ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
-			    ObjectInputStream in = new ObjectInputStream(s.getInputStream());
-			    
-			    DataRequest request = new DataRequest(DataRequest.RECIPE);
-			    request.id = id;
-			    
-			    out.writeObject(request);
-			    out.flush();
-			    
-			    recipe = (CompleteRecipe)in.readObject();
-			    
-			    Log.d("mydebug", recipe.id + " " + recipe.nrSteps);
-			    s.close();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}	
-		}
-	}
-	
-	public RecipeReader(String id) {
+		this.id = id;
 		try {
-			ConnectThread t = new ConnectThread(id);
-			t.start();
+		  InputStream in = am.open("all/" + id);
+	    
+	    String json = "";
+	    while (true) {
+	      byte[] x = new byte[100];
+	      
+	      int n = in.read(x, 0, 100);
+	      if (n <= 0) {
+	        break;
+	      }
+	      json += new String(x, 0, n);
+	    }
+	    
+	    JSONObject jsonObject = new JSONObject(json);
+      JSONArray instructions = jsonObject.getJSONArray("recipe_instructions");
+      JSONArray ingreds = jsonObject.getJSONArray("recipe_ingredients");
+      int nrSteps = instructions.length();
+			System.out.println(nrSteps);
 			
-			t.join();
-		} catch (Exception ex) {}
+			ingredients = new ArrayList<String>();
+			
+			for (int i = 0; i < ingreds.length(); i++) {
+				ingredients.add(ingreds.getString(i));
+			}
+			
+			//bitmaps = new ArrayList<Bitmap>();
+			steps = new ArrayList<String>();
+			
+			for (int i = 0; i < nrSteps; i++) {
+				steps.add(instructions.getString(i));
+//				bitmaps.add(BitmapFactory.decodeFile("/sdcard/cookbuddy/" + id + "/step" + i + ".jpg"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public int getNrSteps() {
-		return recipe.nrSteps;
+		return nrSteps;
 	}
 	
 	public ArrayList<String> getIngredients() {
-		return recipe.ingredients;
+		return ingredients;
 	}
 	
 	public Bitmap getStepPicture(int nrStep) {
-		ByteArrayInputStream imageStream = new ByteArrayInputStream(recipe.pictures.get(nrStep - 1));
-    	return BitmapFactory.decodeStream(imageStream);
+		return bitmaps.get(nrStep - 1);
 	}
 	
 	public String getStepText(int nrStep) {
-		return recipe.steps.get(nrStep - 1);
+		return steps.get(nrStep - 1);
 	}
 	
+	@SuppressLint("SdCardPath")
 	public Bitmap getPicture () {
-		ByteArrayInputStream imageStream = new ByteArrayInputStream(recipe.mainPicture);
-    	return BitmapFactory.decodeStream(imageStream);
+		return BitmapFactory.decodeFile("/sdcard/cookbuddy/" + id + "/header.jpg");
 	}
 }

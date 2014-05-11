@@ -51,32 +51,32 @@ public class RecipeItemAdapter extends BaseAdapter {
 			view = infalInflater.inflate(R.layout.item_recipe_main, null);
 		}
 		
-		TextView title = (TextView)view.findViewById(R.id.item_title);
-		TextView complexity = (TextView)view.findViewById(R.id.complexity);
-		
-		Typeface externalFont = Typeface.createFromAsset(context.getAssets(), "fonts/century.ttf");
-		title.setTypeface(externalFont);
-		
-		title.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
-		
-		title.setText(recipeItems.get(position).title);
-		
-		if (recipeItems.get(position).complexity < 4) {
-			complexity.setTextColor(Color.rgb(34, 139, 34));
-			complexity.setText("LOW");
-		}
-		else if (recipeItems.get(position).complexity < 8) {
-			complexity.setTextColor(Color.rgb(255, 165, 0));
-			complexity.setText("AVERAGE");
-		}
-		else {
-			complexity.setTextColor(Color.RED);
-			complexity.setText("HIGH");
-		}
-		
-		TextView prepTime = (TextView)view.findViewById(R.id.prep_time);
-		prepTime.setText(recipeItems.get(position).prepTime);
-		
+//		TextView title = (TextView)view.findViewById(R.id.item_title);
+//		TextView complexity = (TextView)view.findViewById(R.id.complexity);
+//		
+//		Typeface externalFont = Typeface.createFromAsset(context.getAssets(), "fonts/century.ttf");
+//		title.setTypeface(externalFont);
+//		
+//		title.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
+//		
+//		title.setText(recipeItems.get(position).title);
+//		
+//		if (recipeItems.get(position).complexity < 4) {
+//			complexity.setTextColor(Color.rgb(34, 139, 34));
+//			complexity.setText("LOW");
+//		}
+//		else if (recipeItems.get(position).complexity < 8) {
+//			complexity.setTextColor(Color.rgb(255, 165, 0));
+//			complexity.setText("AVERAGE");
+//		}
+//		else {
+//			complexity.setTextColor(Color.RED);
+//			complexity.setText("HIGH");
+//		}
+//		
+//		TextView prepTime = (TextView)view.findViewById(R.id.prep_time);
+//		prepTime.setText(recipeItems.get(position).prepTime);
+//		
 		ImageView img = (ImageView)view.findViewById(R.id.item_img);
 		img.setImageBitmap(recipeItems.get(position).picture);
 		
